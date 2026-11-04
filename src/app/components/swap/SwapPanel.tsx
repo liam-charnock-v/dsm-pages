@@ -10,7 +10,7 @@ import { SelectedFrames } from "./SelectedFrames";
 import { ReplaceStep } from "./ReplaceStep";
 import { ReviewStep, reviewCounts } from "./ReviewStep";
 import {
-  Candidate, DEAL_LINE, SWAP_VERSION, FrameChoice, Metrics, Period, SwapFrame, activeOccupants, daysIn, defaultChoice, fmtLong, fmtShort,
+  Candidate, DEAL_LINE, SWAP_VERSION, FrameChoice, Metrics, Period, SwapFrame, activeOccupants, defaultChoice, fmtLong, fmtShort,
   autoChoice, frameById, frameImpressions, framePrice, isReady, replacementSlots,
 } from "./swapData";
 import { Btn, Caption, DIVIDER, FG, PanelFooter, SKELETON_KEYFRAMES, Skeleton, Stepper, TextLink, Title } from "./swapUi";
@@ -233,10 +233,7 @@ export function SwapPanel({
                 <>
                   <div className="flex items-center" style={{ gap: 10, padding: "8px 12px", borderRadius: 6, backgroundColor: "var(--primary-50)", border: "1px solid var(--primary-300)" }}>
                     <Calendar size={14} color="#2c24c3" aria-hidden="true" />
-                    <span className="flex flex-col flex-1">
-                      <span style={{ fontSize: "var(--text-sm)", lineHeight: "18px", color: FG, fontVariantNumeric: "tabular-nums" }}>{fmtLong(period)}</span>
-                      <Caption>Swap period · {daysIn(period)} days</Caption>
-                    </span>
+                    <span className="flex-1" style={{ fontSize: "var(--text-sm)", lineHeight: "20px", color: FG, fontVariantNumeric: "tabular-nums" }}>{fmtLong(period)}</span>
                     <TextLink onClick={() => { setStep(1); setPickerOpen(true); }}>Edit</TextLink>
                   </div>
                   <div role="tablist" aria-label="Discover method" className="flex" style={{ backgroundColor: "var(--neutral-200)", borderRadius: 6, padding: 2, gap: 2 }}>
