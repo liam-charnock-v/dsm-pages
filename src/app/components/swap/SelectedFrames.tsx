@@ -35,7 +35,7 @@ export function SelectedFrames({
               <>
                 <div style={{ height: 1, backgroundColor: "rgba(19,18,33,0.07)", margin: "6px 0" }} />
                 {frameStatus(f, period) === "Available" ? (
-                  <Caption>Available for {fmtShort(period)}. Added as normal, with no donor and no replacement.</Caption>
+                  <Caption>Available for {fmtShort(period)}.</Caption>
                 ) : f.media === "Paper" ? (
                   <PaperDonors frame={f} period={period} />
                 ) : SWAP_VERSION === 2 ? (
@@ -54,7 +54,7 @@ export function SelectedFrames({
 
 function summary(f: SwapFrame, period: Period, choice: FrameChoice) {
   const occ = activeOccupants(f, period);
-  if (!occ.length) return { text: "Available · added as normal", ready: true };
+  if (!occ.length) return { text: "Available", ready: true };
   if (f.media === "Digital") {
     const ready = isReady(f, period, choice);
     const taken = occ.filter((o) => choice.donors.includes(o.donorId));

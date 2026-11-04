@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDown, Info, MapPin, RectangleHorizontal } from "lucide-react";
-import { DEAL_LINE, Period, SUGGESTIONS, SwapFrame, activeOccupants, fmtShort, frameById } from "./swapData";
+import { Period, SUGGESTIONS, SwapFrame, activeOccupants, fmtShort, frameById } from "./swapData";
 import { Caption, Checkbox, Chip, FG, FG2, FG3, Mono, Tooltip } from "./swapUi";
 
 /** V2: frames ranked against the deal line criteria, best match first */
@@ -28,7 +28,6 @@ export function DiscoverSuggested({
         <span style={{ fontSize: "var(--text-xs)", lineHeight: "20px", color: FG3 }}>Suggested frames</span>
         <Caption>{list.length} candidates</Caption>
       </div>
-      <Caption color={FG2}>Ranked by how closely each frame matches the {DEAL_LINE.name} criteria.</Caption>
       {list.map((s) => (
         <SuggestionCard
           key={s.frame.id}

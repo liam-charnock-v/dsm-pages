@@ -159,13 +159,16 @@ export function SwapPanel({
   } else if (step === 2) {
     const needs = selected.length - readyCount;
     back = () => setView("search");
-    primary = <Btn variant="primary" disabled={!!needs} onClick={() => { setStep(3); setActiveSlot(null); }} iconEnd={arrow}>Continue</Btn>;
+    // Nothing to replace: skip straight to review
+    primary = slots.length
+      ? <Btn variant="primary" disabled={!!needs} onClick={() => { setStep(3); setActiveSlot(null); }} iconEnd={arrow}>Continue</Btn>
+      : <Btn variant="primary" disabled={!!needs} onClick={() => { setActiveSlot(null); setStep(4); }} iconEnd={arrow}>Review swap</Btn>;
   } else if (step === 3) {
     back = () => (activeSlot ? setActiveSlot(null) : setStep(2));
     middle = <Caption>{chosenCount} of {slots.length} chosen</Caption>;
     primary = <Btn variant="primary" disabled={chosenCount < slots.length} onClick={() => { setActiveSlot(null); setStep(4); }} iconEnd={arrow}>Review swap</Btn>;
   } else {
-    back = () => setStep(3);
+    back = () => setStep(slots.length ? 3 : 2);
     primary = <Btn variant="primary" onClick={confirm}>Confirm swap</Btn>;
   }
   const footer = (

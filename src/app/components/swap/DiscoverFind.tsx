@@ -171,7 +171,7 @@ export function DiscoverFind({
 
       <FilterBar config={FIND_FILTERS} filters={filters} onChange={onFiltersChange} />
 
-      {results.length > 0 && <Caption>{results.length} {results.length === 1 ? "frame" : "frames"} · available first</Caption>}
+      {results.length > 0 && <Caption>{results.length} {results.length === 1 ? "frame" : "frames"}</Caption>}
 
       {!results.length && (
         <div style={{ padding: "20px 12px", textAlign: "center" }}>

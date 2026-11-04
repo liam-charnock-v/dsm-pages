@@ -27,19 +27,6 @@ const Spinner = ({ size = 28 }: { size?: number }) => (
   <LoaderCircle size={size} color="#2c24c3" aria-hidden="true" style={{ animation: "swapSpin 800ms linear infinite" }} />
 );
 
-/* Flow 02 — DSM loads deal-line criteria and inventory */
-export function OpeningSwapOverlay() {
-  return (
-    <Scrim label="Opening swap">
-      <div role="status" className="flex flex-col items-center text-center" style={{ gap: 8 }}>
-        <Spinner />
-        <span style={{ fontSize: "var(--text-base)", lineHeight: "22px", fontWeight: "var(--font-weight-medium)", color: FG }}>Opening swap</span>
-        <span style={{ fontSize: "var(--text-sm)", lineHeight: "20px", color: FG2 }}>Loading Deal line 1 criteria and inventory for Madrid.</span>
-      </div>
-    </Scrim>
-  );
-}
-
 /* Flow 17 — commit in progress; no cancel */
 export function ConfirmingSwapOverlay({ frames, replacements, onDone }: { frames: number; replacements: number; onDone: () => void }) {
   const [done, setDone] = useState(0);

@@ -323,12 +323,12 @@ function TargetTile({
   selected,
   onSelect,
   position = "single",
-  met = false,
+  status,
 }: {
   target: TargetRow;
   selected: boolean;
-  /** All deal line targets met: chips turn green */
-  met?: boolean;
+  /** Met: green chips. Unmet: red chips. Unknown: neutral */
+  status?: "met" | "unmet";
   onSelect: () => void;
   position?: "first" | "middle" | "last" | "single";
 }) {
@@ -338,6 +338,11 @@ function TargetTile({
     last: "0 0 var(--radius) var(--radius)",
     single: "var(--radius)",
   };
+
+  const tone =
+    status === "met" ? { bg: "var(--green-100)", fg: "var(--green-900)" }
+    : status === "unmet" ? { bg: "var(--red-100)", fg: "var(--red-800)" }
+    : { bg: "var(--primary-100)", fg: "var(--secondary-foreground)" };
 
   return (
     <button
@@ -381,7 +386,7 @@ function TargetTile({
           <div
             className="flex h-6 items-center justify-center overflow-clip px-2"
             style={{
-              backgroundColor: met ? "var(--green-100)" : target.unmet ? "var(--pink-100)" : "var(--primary-100)",
+              backgroundColor: tone.bg,
               borderRadius: "var(--radius-full)",
               minWidth: 24,
             }}
@@ -391,7 +396,7 @@ function TargetTile({
                 fontSize: "var(--text-sm)",
                 fontWeight: "var(--font-weight-normal)",
                 lineHeight: "20px",
-                color: met ? "var(--green-900)" : target.unmet ? "var(--pink-800)" : "var(--secondary-foreground)",
+                color: tone.fg,
               }}
             >
               {target.values.amount}
@@ -401,7 +406,7 @@ function TargetTile({
           <div
             className="flex h-6 items-center justify-center overflow-clip px-2"
             style={{
-              backgroundColor: met ? "var(--green-100)" : "var(--primary-100)",
+              backgroundColor: tone.bg,
               borderRadius: "var(--radius-full)",
               minWidth: 24,
             }}
@@ -411,7 +416,7 @@ function TargetTile({
                 fontSize: "var(--text-sm)",
                 fontWeight: "var(--font-weight-normal)",
                 lineHeight: "20px",
-                color: met ? "var(--green-900)" : "var(--secondary-foreground)",
+                color: tone.fg,
               }}
             >
               {target.values.qty}
@@ -741,7 +746,7 @@ export function DealLinePanel({
   onAvailabilityReady,
   initialDateRange,
   initialSelections,
-  targetsMet = false,
+  metTargets,
   swappedIn = [],
 }: {
   dealLineName?: string;
@@ -750,8 +755,8 @@ export function DealLinePanel({
   initialDateRange?: DateRange;
   /** Pre-filled field values, keyed by card id */
   initialSelections?: Record<string, string[]>;
-  /** Every target (frames, impressions, budget) is met */
-  targetsMet?: boolean;
+  /** Targets that are met, by target row id: those chips turn green */
+  metTargets?: Record<string, boolean>;
   /** Frames moved in by a confirmed swap */
   swappedIn?: SwappedInFrame[];
 }) {
@@ -967,7 +972,7 @@ export function DealLinePanel({
                           selected={selectedItems.has(target.id)}
                           onSelect={() => toggleSelect(target.id)}
                           position={getPosition(i, section.targets!.length)}
-                          met={targetsMet}
+                          status={metTargets ? (metTargets[target.id] ? "met" : "unmet") : target.unmet ? "unmet" : undefined}
                         />
                       ))}
                     </div>

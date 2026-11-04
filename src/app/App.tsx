@@ -11,7 +11,7 @@ import { FrameInfoCard, SelectedMarker } from "./components/FrameInfoCard";
 import { MapSearchFilter } from "./components/MapSearchFilter";
 import { SwapBanner } from "./components/SwapBanner";
 import { SwapPanel, SwapResult, MapPin } from "./components/swap/SwapPanel";
-import { CancelSwapDialog, ConfirmingSwapOverlay, OpeningSwapOverlay } from "./components/swap/SwapOverlays";
+import { CancelSwapDialog, ConfirmingSwapOverlay } from "./components/swap/SwapOverlays";
 import { DEAL_LINE, INITIAL_METRICS, Metrics, SwapFrame, TARGETS } from "./components/swap/swapData";
 import { Toaster } from "./components/ui/sonner";
 import { Check, X } from "lucide-react";
@@ -84,8 +84,13 @@ export default function App() {
     setSwapFocusTarget({ lat: f.lat, lng: f.lng, nonce: swapFocusNonce.current });
   }, []);
 
-  const targetsMet =
-    metrics.frames >= TARGETS.frames && metrics.impressions >= TARGETS.impressions && metrics.budget >= TARGETS.budget;
+  // Keyed by the deal line target row ids
+  const metTargets = {
+    frame: metrics.frames >= TARGETS.frames,
+    impressions: metrics.impressions >= TARGETS.impressions,
+    budget: metrics.budget >= TARGETS.budget,
+  };
+  const targetsMet = metTargets.frame && metTargets.impressions && metTargets.budget;
   const swappedPins = useMemo(
     () => swapResult?.pins.map((p) => ({ ...p, tone: "success" as const })),
     [swapResult],
@@ -272,7 +277,7 @@ export default function App() {
                                   hideCheckAllocate
                                   initialDateRange={dl.id === "dl1" ? DEAL_LINE_RANGE : undefined}
                                   initialSelections={dl.id === "dl1" ? DEAL_LINE_SELECTIONS : undefined}
-                                  targetsMet={dl.id === "dl1" && targetsMet}
+                                  metTargets={dl.id === "dl1" ? metTargets : undefined}
                                 />
                                 {/* Selection ring */}
                                 {isSelected && (
@@ -320,7 +325,7 @@ export default function App() {
                             onAvailabilityReady={() => setShowAvailability(true)}
                             initialDateRange={activeDealLine === "dl1" ? DEAL_LINE_RANGE : undefined}
                             initialSelections={activeDealLine === "dl1" ? DEAL_LINE_SELECTIONS : undefined}
-                            targetsMet={activeDealLine === "dl1" && targetsMet}
+                            metTargets={activeDealLine === "dl1" ? metTargets : undefined}
                           />
                         </div>
                       )}
@@ -511,7 +516,6 @@ export default function App() {
         </div>
       )}
 
-      {swapLoading && <OpeningSwapOverlay />}
       {pendingSwap && (
         <ConfirmingSwapOverlay
           frames={pendingSwap.swappedIn.length}
