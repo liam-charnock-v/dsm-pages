@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { ChevronDown, Info, Minus, Plus } from "lucide-react";
 import {
   FrameChoice, Period, SwapFrame, activeOccupants, coverage, daysIn, defaultChoice, fmtEur, fmtMid, fmtNum, fmtShort,
-  frameById, framePrice, frameStatus, gaps, isReady, monthLabel, statusTone,
+  SWAP_VERSION, frameById, framePrice, frameStatus, gaps, isReady, monthLabel, slotSources, statusTone,
 } from "./swapData";
-import { BORDER, Caption, Card, Checkbox, Chip, FG, FG2, Micro, Mono, Title, Tooltip } from "./swapUi";
+import { BORDER, Caption, Card, Checkbox, Chip, FG, FG2, Micro, Mono, TextLink, Title, Tooltip } from "./swapUi";
 
 /* Step 2 — confirm where each selected frame comes from (flow 08–09) */
 export function SelectedFrames({
@@ -37,6 +38,8 @@ export function SelectedFrames({
                   <Caption>Available for {fmtShort(period)}. Added as normal, with no donor and no replacement.</Caption>
                 ) : f.media === "Paper" ? (
                   <PaperDonors frame={f} period={period} />
+                ) : SWAP_VERSION === 2 ? (
+                  <DigitalAuto frame={f} period={period} choice={choice} onChoice={(c) => onChoice(id, c)} />
                 ) : (
                   <DigitalDonors frame={f} period={period} choice={choice} onChoice={(c) => onChoice(id, c)} />
                 )}
@@ -180,6 +183,59 @@ const Legend = ({ color, children }: { color: string; children: string }) => (
     <Caption>{children}</Caption>
   </span>
 );
+
+/* V2 digital: slots and donors are chosen for you; the full editor sits behind Change */
+function DigitalAuto({
+  frame: f, period, choice, onChoice,
+}: {
+  frame: SwapFrame; period: Period; choice: FrameChoice; onChoice: (c: FrameChoice) => void;
+}) {
+  const ready = isReady(f, period, choice);
+  const [editing, setEditing] = useState(!ready);
+  // Adjacent date ranges with the same source read as one
+  const rows = slotSources(f, period, choice).reduce<{ period: Period; donors: string[]; names: { name: string; live?: boolean }[]; free: boolean }[]>((acc, r) => {
+    const ids = r.donors.map((d) => d.id).sort();
+    const last = acc[acc.length - 1];
+    if (last && last.free === r.free && last.donors.join() === ids.join()) last.period = { start: last.period.start, end: r.period.end };
+    else acc.push({ period: r.period, donors: ids, names: r.donors.map((d) => ({ name: d.name, live: d.live })), free: r.free });
+    return acc;
+  }, []);
+
+  if (editing) {
+    return (
+      <div className="flex flex-col" style={{ gap: 8 }}>
+        <DigitalDonors frame={f} period={period} choice={choice} onChoice={onChoice} />
+        {ready && <span><TextLink onClick={() => setEditing(false)}>Done</TextLink></span>}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col" style={{ gap: 8 }}>
+      <div className="flex items-center justify-between" style={{ gap: 8 }}>
+        <Title size="sm">{choice.need} of {f.slots} slots for {fmtShort(period)}</Title>
+        <TextLink onClick={() => setEditing(true)}>Change</TextLink>
+      </div>
+      <div className="flex flex-col" style={{ borderRadius: 8, border: `1px solid ${BORDER}`, backgroundColor: "#fff" }}>
+        {rows.map((r, i) => (
+          <div key={r.period.start.getTime()} className="flex items-start" style={{ gap: 12, padding: "8px 10px", borderTop: i ? `1px solid ${BORDER}` : "none" }}>
+            <span style={{ width: 72, flexShrink: 0, fontSize: "var(--text-xs)", lineHeight: "20px", color: FG2, fontVariantNumeric: "tabular-nums" }}>{fmtShort(r.period)}</span>
+            <span className="flex flex-wrap items-center flex-1 min-w-0" style={{ gap: 6 }}>
+              {r.names.map((d) => (
+                <span key={d.name} className="flex items-center" style={{ gap: 6 }}>
+                  <span style={{ fontSize: "var(--text-sm)", lineHeight: "20px", color: FG }}>{d.name}</span>
+                  {d.live && <Chip tone="success">Live</Chip>}
+                </span>
+              ))}
+              {r.free && <span style={{ fontSize: "var(--text-sm)", lineHeight: "20px", color: r.names.length ? FG2 : FG }}>{r.names.length ? "+ free inventory" : "Free inventory"}</span>}
+            </span>
+          </div>
+        ))}
+      </div>
+      <Caption>Chosen to cover every day with the fewest campaigns.</Caption>
+    </div>
+  );
+}
 
 /* Digital: set share of time, tick donors until every period is covered */
 function DigitalDonors({

@@ -11,7 +11,7 @@ import { ReplaceStep } from "./ReplaceStep";
 import { ReviewStep, reviewCounts } from "./ReviewStep";
 import {
   Candidate, DEAL_LINE, SWAP_VERSION, FrameChoice, Metrics, Period, SwapFrame, activeOccupants, daysIn, defaultChoice, fmtLong, fmtShort,
-  frameById, frameImpressions, framePrice, isReady, replacementSlots,
+  autoChoice, frameById, frameImpressions, framePrice, isReady, replacementSlots,
 } from "./swapData";
 import { Btn, Caption, DIVIDER, FG, PanelFooter, SKELETON_KEYFRAMES, Skeleton, Stepper, TextLink, Title } from "./swapUi";
 
@@ -94,8 +94,15 @@ export function SwapPanel({
 
   const toggle = (id: string) => setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
   const openSelected = (ids: string[]) => {
+    // V2: digital frames arrive with their slots and donors already chosen
+    let next = choices;
+    if (SWAP_VERSION === 2 && period) {
+      next = { ...choices };
+      ids.forEach((id) => { if (!choices[id]) next[id] = autoChoice(frameById(id)!, period); });
+      setChoices(next);
+    }
     setSelected(ids);
-    const firstNeeding = ids.find((id) => period && !isReady(frameById(id)!, period, choices[id] ?? defaultChoice()));
+    const firstNeeding = ids.find((id) => period && !isReady(frameById(id)!, period, next[id] ?? defaultChoice()));
     setExpandedId(firstNeeding ?? ids.find((id) => period && activeOccupants(frameById(id)!, period).length) ?? ids[0] ?? null);
     setView("selected");
   };

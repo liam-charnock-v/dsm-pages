@@ -80,7 +80,7 @@ export const DEAL_LINE = {
   name: "Deal line 1",
   period: { start: day(2026, 7, 1), end: day(2026, 7, 31) } as Period,
   /** Deal line filters, pre-selected in swap */
-  criteria: { format: ["6-Sheet", "48-Sheet", "Mupi"], mediaType: ["Digital", "Paper"] },
+  criteria: { format: ["6-Sheet", "48-Sheet", "Mupi"], mediaType: ["Paper"] },
 };
 
 export interface Metrics { frames: number; impressions: number; budget: number }
@@ -148,6 +148,12 @@ export const FRAMES: SwapFrame[] = [
   { id: "ES-MAD-PE-00610.D1.01", address: "Plaza de España 2, Madrid", area: "gv", lat: 40.4235, lng: -3.7125, format: "96-Sheet", media: "Paper", size: "12.2 × 3.05 m", impressions: 92_000, price: 2_900, tags: ["Premium", "High Traffic"], occupants: [] },
   { id: "ES-MAD-SA-00520.D1.01", address: "Calle de Goya 14, Madrid", area: "sal", lat: 40.4245, lng: -3.6845, format: "Mupi", media: "Paper", size: "1.2 × 1.75 m", impressions: 55_400, price: 1_060, tags: ["Local", "Premium"], occupants: [] },
 ];
+// Frames of a media type the deal line doesn't buy can't be swapped in (Deal line 1 is paper only)
+FRAMES.forEach((f) => {
+  if (!f.notMatching && !DEAL_LINE.criteria.mediaType.includes(f.media)) {
+    f.notMatching = `${f.media.toLowerCase()} frame, and ${DEAL_LINE.name} is ${DEAL_LINE.criteria.mediaType.join(" and ").toLowerCase()} only`;
+  }
+});
 export const frameById = (id: string) => FRAMES.find((f) => f.id === id);
 
 /* ── V2: smart suggestions ranked against the deal line criteria ──
@@ -158,7 +164,7 @@ export const SUGGESTIONS: Suggestion[] = [
   { frameId: "ES-MAD-GV-00131.D1.01", score: 94, postcode: "28013", reasons: ["Format and media type match the deal line", "Audience fit: 18–34", "Available for all of 1–31 Jul"] },
   { frameId: "ES-MAD-PC-00321.D1.01", score: 89, postcode: "28046", reasons: ["Media type matches the deal line", "Premium business district", "Partly free; the rest comes from Rebajas Verano"] },
   { frameId: "ES-MAD-SA-00520.D1.01", score: 85, postcode: "28001", reasons: ["Format and media type match the deal line", "Audience fit: 25–44, high income", "Available for all of 1–31 Jul"] },
-  { frameId: "ES-MAD-PS-00456.D2.02", score: 82, postcode: "28013", reasons: ["Digital share of time adds impressions", "Transport hub, very high footfall", "Slots come from three campaigns"] },
+  { frameId: "ES-MAD-AT-00215.D1.01", score: 82, postcode: "28045", reasons: ["Format and media type match the deal line", "Transport hub, very high footfall", "Free from Mad Cool Festival for all of 1–31 Jul"] },
 ];
 
 /* Typeahead locations — counts are inventory totals for the market */
@@ -296,6 +302,32 @@ export function takenDonors(f: SwapFrame, period: Period, choice: FrameChoice) {
 export function isReady(f: SwapFrame, period: Period, choice: FrameChoice) {
   if (f.media === "Paper") return true;
   return coverage(f, period, choice.need, choice.donors).every((s) => s.covered >= choice.need);
+}
+
+/**
+ * V2: pick donors automatically — the smallest set of campaigns that covers every day,
+ * preferring campaigns that aren't live. Falls back to every donor if nothing covers it.
+ */
+export function autoChoice(f: SwapFrame, period: Period, need = defaultChoice().need): FrameChoice {
+  if (f.media !== "Digital") return defaultChoice();
+  const ids = activeOccupants(f, period).map((o) => o.donorId);
+  const sets: string[][] = [];
+  for (let mask = 0; mask < 1 << ids.length; mask++) sets.push(ids.filter((_, i) => mask & (1 << i)));
+  const live = (set: string[]) => set.filter((id) => DONORS[id].live).length;
+  const best = sets
+    .filter((donors) => isReady(f, period, { need, donors }))
+    .sort((a, b) => a.length - b.length || live(a) - live(b))[0];
+  return { need, donors: best ?? ids };
+}
+
+/** V2 summary: where the slots come from in each date range */
+export function slotSources(f: SwapFrame, period: Period, choice: FrameChoice) {
+  const occ = activeOccupants(f, period).filter((o) => choice.donors.includes(o.donorId));
+  return coverage(f, period, choice.need, choice.donors).map((seg) => {
+    const from = occ.filter((o) => overlap(o.released, seg.period));
+    const taken = from.reduce((n, o) => n + (o.slots ?? 0), 0);
+    return { period: seg.period, donors: from.map((o) => o.donor), free: taken < choice.need };
+  });
 }
 
 export function frameImpressions(f: SwapFrame, choice: FrameChoice) {

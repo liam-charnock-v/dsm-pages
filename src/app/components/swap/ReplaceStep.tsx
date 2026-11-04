@@ -52,10 +52,7 @@ export function ReplaceStep({
 
   return (
     <div className="flex flex-col" style={{ gap: 12 }}>
-      <div className="flex items-center justify-between">
-        <Title>Choose replacements</Title>
-        <Chip tone={count === slots.length ? "success" : "warning"}>{count} of {slots.length} chosen</Chip>
-      </div>
+      <Title>Choose replacements</Title>
       {count < slots.length && (
         <Caption>Each donor that gives up a frame gets a replacement for the released dates. It inherits the price of the frame it replaces.</Caption>
       )}
