@@ -125,7 +125,7 @@ export default function App() {
         <div
           role="status"
           className="flex items-start"
-          style={{ gap: 12, width: "100%", padding: "12px 12px 12px 16px", borderRadius: 8, backgroundColor: "#fff", border: "1px solid var(--neutral-300)", boxShadow: "0px 4px 12px rgba(16,16,52,0.08), 0px 1px 2px rgba(0,0,0,0.05)" }}
+          style={{ gap: 12, width: "var(--width, 440px)", padding: "12px 12px 12px 16px", borderRadius: 8, backgroundColor: "#fff", border: "1px solid var(--neutral-300)", boxShadow: "0px 4px 12px rgba(16,16,52,0.08), 0px 1px 2px rgba(0,0,0,0.05)" }}
         >
           <Check size={16} color="var(--essential-secondary)" aria-hidden="true" style={{ flexShrink: 0, marginTop: 2 }} />
           <span className="flex flex-col flex-1 min-w-0" style={{ gap: 2 }}>
