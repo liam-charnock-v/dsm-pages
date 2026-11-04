@@ -10,8 +10,8 @@ const uniq = (xs: string[]) => [...new Set(xs)];
 const SWAPPABLE = FRAMES.filter((f) => !f.notMatching);
 export const FIND_FILTERS: FilterConfig[] = [
   { id: "format", label: "Format", options: FORMATS },
-  { id: "mediaType", label: "Media Type", options: MEDIA_TYPES },
-  { id: "frameSize", label: "Frame Size", options: uniq(SWAPPABLE.map((f) => f.size)) },
+  { id: "mediaType", label: "Media type", options: MEDIA_TYPES },
+  { id: "frameSize", label: "Frame size", options: uniq(SWAPPABLE.map((f) => f.size)) },
   { id: "tags", label: "Tags", options: uniq(SWAPPABLE.flatMap((f) => f.tags)) },
 ];
 const filterValues = (f: SwapFrame) => ({ format: [f.format], mediaType: [f.media], frameSize: [f.size], tags: f.tags });

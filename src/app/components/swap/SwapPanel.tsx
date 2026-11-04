@@ -219,7 +219,7 @@ export function SwapPanel({
 
               {step === 2 && period && view === "search" && (
                 <>
-                  <div className="flex items-center" style={{ gap: 10, padding: "8px 10px", borderRadius: 8, backgroundColor: "rgba(44,36,195,0.05)", border: "1px solid rgba(44,36,195,0.15)" }}>
+                  <div className="flex items-center" style={{ gap: 10, padding: "8px 12px", borderRadius: 6, backgroundColor: "var(--primary-50)", border: "1px solid var(--primary-300)" }}>
                     <Calendar size={14} color="#2c24c3" aria-hidden="true" />
                     <span className="flex flex-col flex-1">
                       <span style={{ fontSize: "var(--text-sm)", lineHeight: "18px", color: FG, fontVariantNumeric: "tabular-nums" }}>{fmtLong(period)}</span>
@@ -227,7 +227,7 @@ export function SwapPanel({
                     </span>
                     <TextLink onClick={() => { setStep(1); setPickerOpen(true); }}>Edit</TextLink>
                   </div>
-                  <div role="tablist" aria-label="Discover method" className="flex" style={{ backgroundColor: "rgba(19,18,33,0.05)", borderRadius: 6, padding: 3, gap: 2 }}>
+                  <div role="tablist" aria-label="Discover method" className="flex" style={{ backgroundColor: "var(--neutral-200)", borderRadius: 6, padding: 2, gap: 2 }}>
                     {([["find", "Find a frame"], ["upload", "Upload list"]] as const).map(([id, label]) => (
                       <button
                         key={id}
@@ -235,7 +235,7 @@ export function SwapPanel({
                         aria-selected={tab === id}
                         onClick={() => setTab(id)}
                         className="cursor-pointer border-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
-                        style={{ flex: 1, height: 28, borderRadius: 4, fontSize: "var(--text-xs)", fontWeight: tab === id ? 600 : 400, color: tab === id ? FG : "#7c7b87", backgroundColor: tab === id ? "#fff" : "transparent", boxShadow: tab === id ? "0 1px 3px rgba(19,18,33,0.12)" : "none" }}
+                        style={{ flex: 1, height: 32, borderRadius: 6, fontSize: "var(--text-sm)", color: tab === id ? "var(--essential-secondary)" : "var(--neutral-600)", backgroundColor: tab === id ? "#fff" : "transparent", border: tab === id ? "1px solid var(--neutral-300)" : "1px solid transparent", boxShadow: tab === id ? "var(--elevation-sm)" : "none" }}
                       >
                         {label}
                       </button>

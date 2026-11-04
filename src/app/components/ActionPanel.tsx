@@ -45,7 +45,7 @@ export const LOCATION_CATEGORIES = [
 
 export const FIELD_LABELS: Record<string, string> = {
   channel: "Channel",
-  "media-type": "Media Type",
+  "media-type": "Media type",
   networks: "Networks",
   format: "Format",
   location: "Location",

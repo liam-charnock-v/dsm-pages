@@ -10,10 +10,10 @@ const STATUS_CONFIG: Record<
   CampaignStatus,
   { bg: string; fg: string; border: string }
 > = {
-  Draft:    { bg: "rgba(248,188,26,0.08)",  fg: "#9d7717",  border: "rgba(248,188,26,0.3)"  },
-  Proposal: { bg: "rgba(35,55,255,0.06)",   fg: "#2c24c3",  border: "rgba(35,55,255,0.25)"  },
-  Confirm:  { bg: "rgba(34,197,94,0.08)",   fg: "#16a34a",  border: "rgba(34,197,94,0.3)"   },
-  Option:   { bg: "rgba(147,51,234,0.07)",  fg: "#7c3aed",  border: "rgba(147,51,234,0.28)" },
+  Draft:    { bg: "var(--yellow-100)",  fg: "var(--yellow-900)",  border: "transparent" },
+  Proposal: { bg: "var(--primary-100)", fg: "var(--primary-600)", border: "transparent" },
+  Confirm:  { bg: "var(--green-100)",   fg: "var(--green-900)",   border: "transparent" },
+  Option:   { bg: "var(--pink-100)",    fg: "var(--pink-800)",    border: "transparent" },
 };
 
 const STATUSES: CampaignStatus[] = ["Draft", "Proposal", "Confirm", "Option"];
@@ -28,12 +28,12 @@ function StatusChip({ value }: { value: CampaignStatus }) {
       style={{
         display: "inline-flex",
         alignItems: "center",
-        height: 20,
-        padding: "0 7px",
+        height: 24,
+        padding: "0 8px",
         borderRadius: 999,
         backgroundColor: c.bg,
         fontFamily: "'Inter', sans-serif",
-        fontSize: "var(--text-xs)",
+        fontSize: "var(--text-sm)",
         fontWeight: "var(--font-weight-normal)",
         color: c.fg,
         lineHeight: "20px",
@@ -73,8 +73,8 @@ export function CampaignStatusCard() {
         position: "relative",
         backgroundColor: "#ffffff",
         borderRadius: 12,
-        padding: "12px 8px",
-        boxShadow: "0px 3px 4px 0px rgba(16,16,52,0.06), 0px 1px 2px 0px rgba(16,16,52,0.04)",
+        padding: 12,
+        boxShadow: "var(--elevation-sm)",
       }}
     >
       {/* Card border overlay */}
@@ -84,20 +84,7 @@ export function CampaignStatusCard() {
           position: "absolute",
           inset: 0,
           borderRadius: 12,
-          border: "1px solid rgba(19,18,33,0.1)",
-          pointerEvents: "none",
-          zIndex: 1,
-        }}
-      />
-
-      {/* Inner inset shadow (Figma spec) */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          borderRadius: 12,
-          boxShadow: "inset 0px -1px 0px 0px rgba(16,16,52,0.08)",
+          border: "1px solid var(--neutral-300)",
           pointerEvents: "none",
           zIndex: 1,
         }}
@@ -107,12 +94,11 @@ export function CampaignStatusCard() {
       <p
         style={{
           fontFamily: "'Inter', sans-serif",
-          fontSize: "var(--text-xs)",
+          fontSize: "var(--text-sm)",
           fontWeight: "var(--font-weight-medium)",
-          color: "var(--foreground)",
-          lineHeight: "16px",
-          marginBottom: 8,
-          paddingLeft: 4,
+          color: "rgba(19,18,33,0.9)",
+          lineHeight: "20px",
+          marginBottom: 4,
         }}
       >
         Campaign Status
@@ -127,10 +113,10 @@ export function CampaignStatusCard() {
           alignItems: "center",
           gap: 4,
           width: "100%",
-          height: 28,
-          padding: "0 8px",
+          height: 34,
+          padding: "0 8px 0 4px",
           backgroundColor: "#ffffff",
-          borderRadius: 4,
+          borderRadius: 6,
           border: "none",
           outline: "none",
           cursor: "pointer",
@@ -143,10 +129,9 @@ export function CampaignStatusCard() {
           style={{
             position: "absolute",
             inset: 0,
-            borderRadius: 4,
-            border: "1px solid #eaeaef",
-            boxShadow:
-              "0px 1px 2px 0px rgba(16,16,52,0.08), inset 0px -1px 0px 0px rgba(16,16,52,0.08)",
+            borderRadius: 6,
+            border: "1px solid rgba(19,18,33,0.2)",
+            boxShadow: "var(--elevation-sm)",
             pointerEvents: "none",
           }}
         />

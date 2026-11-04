@@ -12,7 +12,8 @@
   
   /* Font weights */
   --font-weight-normal: 400;
-  --font-weight-medium: 600;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
   
   /* The default background color for the application. */
   --background: rgba(255, 255, 255, 1.00);
@@ -53,7 +54,7 @@
   /* The default background color for input fields, text areas, and other input elements. */
   --input-background: rgba(255, 255, 255, 1.00);
   /* Shadow for small elevations, such as cards or modals. */
-  --elevation-sm: 0px 1px 2px 0px rgba(16, 16, 52, 0.08);
+  --elevation-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
   /* The default color for focus rings, outlines, and other focus indicators. */
   --ring: rgba(44, 36, 195, 1.00);
   /* The color for chart elements, such as a bar or line in a chart. */
@@ -89,7 +90,38 @@
   /* The default color for focus rings, outlines, and other focus indicators in sidebars and navigation menus. */
   --sidebar-ring: rgba(44, 36, 195, 1.00);
   /* The background color for panel surfaces like deal line panels */
-  --panel-background: #f2f2f2;
+  --panel-background: #ffffff;
+
+  /* DSM palette (from the live app) */
+  --primary-50: #f4f5ff;
+  --primary-100: #f0f2fe;
+  --primary-200: #ebeefe;
+  --primary-300: #cad1fc;
+  --primary-600: #2c24c3;
+  --primary-700: #272199;
+  --primary-900: #15115e;
+  --primary-950: #090642;
+  --neutral-100: #f8f8f9;
+  --neutral-200: #f3f3f5;
+  --neutral-300: #eaeaef;
+  --neutral-400: #bab9c3;
+  --neutral-500: #a09faa;
+  --neutral-600: #7c7b87;
+  --neutral-700: #605f6b;
+  --neutral-900: #42414e;
+  --neutral-950: #131221;
+  --green-100: #cafce8;
+  --green-600: #129f67;
+  --green-900: #054c30;
+  --yellow-100: #fff5db;
+  --yellow-900: #82651a;
+  --pink-100: #fef2f8;
+  --pink-800: #9d175e;
+  --blue-100: #ebfaff;
+  --blue-900: #1a6a82;
+  --essential-primary: #131221;
+  --essential-secondary: #42414e;
+  --essential-tertiary: #7c7b87;
 }
 
 @theme inline {

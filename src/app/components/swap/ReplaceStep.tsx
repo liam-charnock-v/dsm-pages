@@ -131,7 +131,7 @@ function FindReplacement({
   const all = (CANDIDATES[slot.key] ?? []).filter((c) => !taken.includes(c.id) && (!c.freeFrom || c.freeFrom <= slot.released.start));
   const config: FilterConfig[] = [
     { id: "format", label: "Format", options: [...new Set(all.map((c) => c.format))] },
-    { id: "mediaType", label: "Media Type", options: [...new Set(all.map((c) => c.media))] },
+    { id: "mediaType", label: "Media type", options: [...new Set(all.map((c) => c.media))] },
   ];
   const pool = useMemo(
     () => all

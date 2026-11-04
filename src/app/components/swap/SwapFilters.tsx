@@ -41,9 +41,9 @@ function FilterDropdown({ filterId, label, options, selected, anchorRect, onTogg
   const left = Math.min(anchorRect.left, window.innerWidth - 200 - 8);
 
   return createPortal(
-    <div data-filter-id={filterId} style={{ position: "fixed", top, left, width: 192, zIndex: 9999, backgroundColor: "#fff", borderRadius: 8, border: "1px solid rgba(19,18,33,0.12)", boxShadow: "0 4px 16px rgba(16,16,52,0.14)", overflow: "hidden", fontFamily: "Inter, sans-serif" }}>
+    <div data-filter-id={filterId} style={{ position: "fixed", top, left, width: 192, zIndex: 9999, backgroundColor: "#fff", borderRadius: 6, border: "1px solid var(--neutral-300)", boxShadow: "0 4px 16px rgba(16,16,52,0.14)", overflow: "hidden", fontFamily: "Inter, sans-serif" }}>
       <div style={{ padding: "8px 10px 6px", borderBottom: "1px solid rgba(19,18,33,0.07)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ fontSize: 11, fontWeight: 600, color: "#131221" }}>{label}</span>
+        <span style={{ fontSize: 11, color: "var(--essential-tertiary)" }}>{label}</span>
         {selected.size > 0 && (
           <button onClick={onClear} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: "#2c24c3", fontWeight: 500, padding: 0 }}>Clear</button>
         )}
@@ -64,7 +64,7 @@ function FilterDropdown({ filterId, label, options, selected, anchorRect, onTogg
               <div style={{ width: 14, height: 14, borderRadius: 3, border: active ? "none" : "1.5px solid rgba(19,18,33,0.2)", backgroundColor: active ? "#2c24c3" : "transparent", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.1s" }}>
                 {active && <svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
               </div>
-              <span style={{ fontSize: 12, color: active ? "#131221" : "#42414e", fontWeight: active ? 500 : 400 }}>{opt}</span>
+              <span style={{ fontSize: 13, color: "var(--essential-primary)" }}>{opt}</span>
             </button>
           );
         })}
@@ -93,7 +93,7 @@ export function FilterBar({ config, filters, onChange }: {
 
   return (
     <>
-      <div style={{ display: "flex", gap: 4, overflowX: "auto", paddingBottom: 2 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
         {config.map((f) => {
           const count = filters[f.id]?.size ?? 0;
           const isOpen = openId === f.id;
@@ -106,11 +106,11 @@ export function FilterBar({ config, filters, onChange }: {
               onClick={() => handleClick(f.id)}
               aria-expanded={isOpen}
               aria-haspopup="menu"
-              style={{ display: "flex", alignItems: "center", gap: 4, height: 26, padding: "0 8px", borderRadius: 5, border: active || isOpen ? "1.5px solid rgba(44,36,195,0.35)" : "1px solid rgba(19,18,33,0.14)", backgroundColor: active ? "rgba(44,36,195,0.07)" : isOpen ? "rgba(19,18,33,0.04)" : "#f8f8f9", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", transition: "all 0.12s" }}
+              style={{ display: "flex", alignItems: "center", gap: 4, height: 26, padding: "0 8px", borderRadius: 6, border: active || isOpen ? "1px solid var(--primary-600)" : "1px solid rgba(19,18,33,0.1)", backgroundColor: active ? "var(--primary-100)" : "#fff", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", transition: "all 0.12s" }}
             >
-              <span style={{ fontSize: 11, fontWeight: active ? 600 : 400, color: active ? "#2c24c3" : "#42414e", fontFamily: "Inter, sans-serif" }}>{f.label}</span>
+              <span style={{ fontSize: 12, lineHeight: "16px", color: active ? "var(--primary-600)" : "var(--essential-primary)", fontFamily: "Inter, sans-serif" }}>{f.label}</span>
               {active ? (
-                <span style={{ fontSize: 10, fontWeight: 600, color: "#fff", backgroundColor: "#2c24c3", borderRadius: 99, padding: "0 4px", minWidth: 14, height: 14, display: "flex", alignItems: "center", justifyContent: "center" }}>{count}</span>
+                <span style={{ fontSize: 10, fontWeight: 600, color: "#fff", backgroundColor: "var(--primary-600)", borderRadius: 99, padding: "0 4px", minWidth: 14, height: 14, display: "flex", alignItems: "center", justifyContent: "center" }}>{count}</span>
               ) : (
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2.5 3.75L5 6.25L7.5 3.75" stroke={isOpen ? "#131221" : "#7c7b87"} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
               )}

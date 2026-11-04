@@ -89,7 +89,7 @@ const SECTIONS: Section[] = [
   },
   {
     id: "dealline-info",
-    title: "Deal Line Info:",
+    title: "Deal line info:",
     separated: true,
     cards: [
       {
@@ -108,13 +108,13 @@ const SECTIONS: Section[] = [
       },
       {
         id: "media-type",
-        label: "Media Type",
+        label: "Media type",
         iconPath: svgPaths.p789d080,
         iconViewBox: "0 0 9 14",
         iconInset: "6.25% 21.88%",
       },
     ],
-    addItems: [{ id: "product-template", label: "Product Template" }],
+    addItems: [{ id: "product-template", label: "Product template" }],
   },
   {
     id: "targets",
@@ -185,7 +185,7 @@ const SECTIONS: Section[] = [
   },
   {
     id: "data-targeting",
-    title: "Data Targeting:",
+    title: "Data targeting:",
     addItems: [
       { id: "poi", label: "POI" },
       { id: "segments", label: "Segments" },
@@ -241,10 +241,10 @@ function CardTile({
       }}
       className="flex items-center w-full relative cursor-pointer border-none outline-none transition-colors duration-150"
       style={{
-        height: 36,
+        height: 34,
         padding: "0 8px",
         borderRadius: radiusMap[position],
-        backgroundColor: selected ? "rgba(44, 36, 195, 0.05)" : "var(--card)",
+        backgroundColor: selected ? "var(--primary-50)" : "var(--card)",
       }}
     >
       <div className="flex flex-1 items-center gap-1 min-w-0">
@@ -272,21 +272,20 @@ function CardTile({
         <div
           className="flex items-center justify-center shrink-0 px-2 ml-1"
           style={{
-            height: 20,
-            backgroundColor: "rgba(44,36,195,0.08)",
+            height: 24,
+            backgroundColor: "var(--primary-100)",
             borderRadius: "var(--radius-full)",
-            border: "1px solid rgba(44,36,195,0.2)",
             maxWidth: 120,
           }}
         >
           <span
             className="overflow-hidden whitespace-nowrap"
             style={{
-              fontSize: "var(--text-xs)",
-              fontWeight: "var(--font-weight-medium)",
+              fontSize: "var(--text-sm)",
+              fontWeight: "var(--font-weight-normal)",
               color: "var(--accent)",
               textOverflow: "ellipsis",
-              lineHeight: 1,
+              lineHeight: "20px",
             }}
           >
             {valueLabel}
@@ -302,8 +301,7 @@ function CardTile({
           border: selected
             ? "1px solid var(--accent)"
             : "1px solid rgba(19,18,33,0.2)",
-          boxShadow: "var(--elevation-sm)",
-        }}
+                  }}
       />
       {/* Bottom inset shadow for stacked cards */}
       {position !== "single" && position !== "last" && (
@@ -343,11 +341,11 @@ function TargetTile({
       onClick={onSelect}
       className="flex items-center w-full relative cursor-pointer border-none outline-none transition-colors duration-150"
       style={{
-        height: 36,
+        height: 34,
         paddingLeft: 8,
         paddingRight: 4,
         borderRadius: radiusMap[position],
-        backgroundColor: selected ? "rgba(44, 36, 195, 0.05)" : "var(--card)",
+        backgroundColor: selected ? "var(--primary-50)" : "var(--card)",
       }}
     >
       {/* Left: icon + label */}
@@ -380,7 +378,7 @@ function TargetTile({
           <div
             className="flex h-6 items-center justify-center overflow-clip px-2"
             style={{
-              backgroundColor: target.unmet ? "rgba(220, 38, 38, 0.08)" : "rgba(44, 36, 195, 0.05)",
+              backgroundColor: target.unmet ? "var(--pink-100)" : "var(--primary-100)",
               borderRadius: "var(--radius-full)",
               minWidth: 24,
             }}
@@ -390,7 +388,7 @@ function TargetTile({
                 fontSize: "var(--text-sm)",
                 fontWeight: "var(--font-weight-normal)",
                 lineHeight: "20px",
-                color: target.unmet ? "rgba(185, 28, 28, 0.9)" : "var(--secondary-foreground)",
+                color: target.unmet ? "var(--pink-800)" : "var(--secondary-foreground)",
               }}
             >
               {target.values.amount}
@@ -400,7 +398,7 @@ function TargetTile({
           <div
             className="flex h-6 items-center justify-center overflow-clip px-2"
             style={{
-              backgroundColor: "rgba(44, 36, 195, 0.05)",
+              backgroundColor: "var(--primary-100)",
               borderRadius: "var(--radius-full)",
               minWidth: 24,
             }}
@@ -452,8 +450,7 @@ function TargetTile({
           border: selected
             ? "1px solid var(--accent)"
             : "1px solid rgba(19,18,33,0.2)",
-          boxShadow: "var(--elevation-sm)",
-        }}
+                  }}
       />
       {position !== "single" && position !== "last" && (
         <div
@@ -486,7 +483,7 @@ function AddActionTile({
       }}
       className="flex items-center w-full relative cursor-pointer border-none outline-none transition-opacity duration-150 hover:opacity-80"
       style={{
-        height: 36,
+        height: 34,
         paddingLeft: 8,
         paddingRight: 4,
         borderRadius: "var(--radius)",
@@ -565,10 +562,10 @@ function StatusTile({ selected, onSelect }: { selected: boolean; onSelect: () =>
       onClick={onSelect}
       className="flex items-center w-full relative cursor-pointer border-none outline-none transition-colors duration-150"
       style={{
-        height: 36,
+        height: 34,
         padding: "0 8px",
         borderRadius: "var(--radius)",
-        backgroundColor: selected ? "rgba(44, 36, 195, 0.05)" : "var(--card)",
+        backgroundColor: selected ? "var(--primary-50)" : "var(--card)",
       }}
     >
       <div className="flex flex-1 items-center gap-1 min-w-0">
@@ -593,18 +590,17 @@ function StatusTile({ selected, onSelect }: { selected: boolean; onSelect: () =>
       <div
         className="flex items-center justify-center shrink-0 px-2"
         style={{
-          height: 20,
-          backgroundColor: "rgba(44,36,195,0.08)",
+          height: 24,
+          backgroundColor: "var(--yellow-100)",
           borderRadius: "var(--radius-full)",
-          border: "1px solid rgba(44,36,195,0.2)",
         }}
       >
         <span
           style={{
-            fontSize: "var(--text-xs)",
+            fontSize: "var(--text-sm)",
             fontWeight: "var(--font-weight-normal)",
-            color: "var(--accent)",
-            lineHeight: 1,
+            color: "var(--yellow-900)",
+            lineHeight: "20px",
           }}
         >
           Draft
@@ -619,8 +615,7 @@ function StatusTile({ selected, onSelect }: { selected: boolean; onSelect: () =>
           border: selected
             ? "1px solid var(--accent)"
             : "1px solid rgba(19,18,33,0.2)",
-          boxShadow: "var(--elevation-sm)",
-        }}
+                  }}
       />
     </button>
   );
@@ -663,10 +658,10 @@ function ScheduleTile({
       }}
       className="flex items-center w-full relative cursor-pointer border-none outline-none transition-colors duration-150"
       style={{
-        height: 36,
+        height: 34,
         padding: "0 8px",
         borderRadius: "var(--radius)",
-        backgroundColor: selected ? "rgba(44, 36, 195, 0.05)" : "var(--card)",
+        backgroundColor: selected ? "var(--primary-50)" : "var(--card)",
       }}
     >
       <div className="flex flex-1 items-center gap-1 min-w-0">
@@ -692,21 +687,20 @@ function ScheduleTile({
         <div
           className="flex items-center justify-center shrink-0 px-2"
           style={{
-            height: 20,
-            backgroundColor: "rgba(44,36,195,0.08)",
+            height: 24,
+            backgroundColor: "var(--primary-100)",
             borderRadius: "var(--radius-full)",
-            border: "1px solid rgba(44,36,195,0.2)",
             maxWidth: 160,
           }}
         >
           <span
             className="overflow-hidden whitespace-nowrap"
             style={{
-              fontSize: "var(--text-xs)",
+              fontSize: "var(--text-sm)",
               fontWeight: "var(--font-weight-normal)",
               color: "var(--accent)",
               textOverflow: "ellipsis",
-              lineHeight: 1,
+              lineHeight: "20px",
             }}
           >
             {rangeLabel}
@@ -722,8 +716,7 @@ function ScheduleTile({
           border: selected
             ? "1px solid var(--accent)"
             : "1px solid rgba(19,18,33,0.2)",
-          boxShadow: "var(--elevation-sm)",
-        }}
+                  }}
       />
     </button>
   );
@@ -819,9 +812,9 @@ export function DealLinePanel({
         <div className="flex items-center justify-between">
           <span
             style={{
-              fontSize: "var(--text-base)",
-              fontWeight: "var(--font-weight-medium)",
-              lineHeight: "18px",
+              fontSize: 17,
+              fontWeight: "var(--font-weight-semibold)",
+              lineHeight: "24px",
               color: "var(--foreground)",
             }}
           >
@@ -1005,9 +998,10 @@ export function DealLinePanel({
           }}
         >
           <button
-            className="flex gap-1 h-9 items-center justify-center overflow-clip px-3 w-full border-none outline-none cursor-pointer transition-colors duration-200 hover:opacity-90"
+            className="flex gap-1 items-center justify-center overflow-clip px-3 w-full border-none outline-none cursor-pointer transition-colors duration-200 hover:opacity-90"
             style={{
-              backgroundColor: "var(--primary)",
+              height: 37,
+              backgroundColor: "var(--primary-900)",
               borderRadius: "var(--radius)",
               minWidth: 36,
               boxShadow: "var(--elevation-sm)",
@@ -1021,7 +1015,7 @@ export function DealLinePanel({
                 color: "var(--primary-foreground)",
               }}
             >
-              Check Allocate
+              Check allocation
             </span>
           </button>
         </div>

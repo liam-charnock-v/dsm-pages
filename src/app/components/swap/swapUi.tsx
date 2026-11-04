@@ -9,20 +9,20 @@ import type { ChipTone } from "./swapData";
 
 export const MONO = "'Inter', sans-serif";
 export const FG = "var(--foreground)";
-export const FG2 = "#42414e";
-export const FG3 = "var(--muted-foreground)";
+export const FG2 = "var(--essential-secondary)";
+export const FG3 = "var(--essential-tertiary)";
 export const ACCENT = "var(--accent)";
-export const BORDER = "rgba(19,18,33,0.1)";
-export const DIVIDER = "rgba(19,18,33,0.07)";
-export const TINT = "rgba(44,36,195,0.05)";
+export const BORDER = "var(--neutral-300)";
+export const DIVIDER = "var(--neutral-300)";
+export const TINT = "var(--primary-50)";
 
 const CHIP: Record<ChipTone, { bg: string; fg: string }> = {
-  info: { bg: "#e6f0ff", fg: "#1d4ed8" },
-  warning: { bg: "#fff4d6", fg: "#7a5200" },
-  danger: { bg: "#fde8ec", fg: "#9f1234" },
-  success: { bg: "#ddf5e8", fg: "#0f6b43" },
-  brand: { bg: "rgba(44,36,195,0.08)", fg: "#2c24c3" },
-  neutral: { bg: "rgba(19,18,33,0.06)", fg: "#42414e" },
+  info: { bg: "var(--blue-100)", fg: "var(--blue-900)" },
+  warning: { bg: "var(--yellow-100)", fg: "var(--yellow-900)" },
+  danger: { bg: "var(--pink-100)", fg: "var(--pink-800)" },
+  success: { bg: "var(--green-100)", fg: "var(--green-900)" },
+  brand: { bg: "var(--primary-100)", fg: "var(--primary-600)" },
+  neutral: { bg: "var(--neutral-200)", fg: "var(--neutral-900)" },
 };
 
 export function Chip({ tone, children }: { tone: ChipTone; children: ReactNode }) {
@@ -32,13 +32,14 @@ export function Chip({ tone, children }: { tone: ChipTone; children: ReactNode }
         display: "inline-flex",
         alignItems: "center",
         flexShrink: 0,
-        fontSize: 11,
-        lineHeight: "16px",
+        height: 24,
+        fontSize: "var(--text-sm)",
+        lineHeight: "20px",
         fontWeight: "var(--font-weight-normal)",
         color: CHIP[tone].fg,
         backgroundColor: CHIP[tone].bg,
         borderRadius: "var(--radius-full)",
-        padding: "1px 8px",
+        padding: "0 8px",
         whiteSpace: "nowrap",
       }}
     >
@@ -89,7 +90,7 @@ export const Micro = ({ children }: { children: ReactNode }) => (
 );
 
 export const Title = ({ children, size = "md" }: { children: ReactNode; size?: "sm" | "md" }) => (
-  <span style={{ fontSize: size === "md" ? "var(--text-base)" : "var(--text-sm)", lineHeight: size === "md" ? "22px" : "20px", fontWeight: "var(--font-weight-medium)", color: FG }}>
+  <span style={{ fontSize: size === "md" ? "var(--text-base)" : "var(--text-sm)", lineHeight: "20px", fontWeight: size === "md" ? "var(--font-weight-semibold)" : "var(--font-weight-medium)", color: FG }}>
     {children}
   </span>
 );
@@ -109,12 +110,12 @@ export function Btn({
   ariaLabel?: string;
   fullWidth?: boolean;
 }) {
-  const h = size === "sm" ? 28 : size === "lg" ? 40 : 32;
+  const h = size === "sm" ? 28 : size === "lg" ? 37 : 32;
   const look =
     variant === "primary"
       ? { backgroundColor: "var(--primary)", color: "var(--primary-foreground)", border: "1px solid transparent", boxShadow: "var(--elevation-sm)" }
       : variant === "secondary"
-        ? { backgroundColor: "#fff", color: "#2c24c3", border: `1px solid ${BORDER}`, boxShadow: "var(--elevation-sm)" }
+        ? { backgroundColor: "#fff", color: "var(--primary-600)", border: "1px solid var(--neutral-300)", boxShadow: "var(--elevation-sm)" }
         : variant === "link"
           ? { backgroundColor: "transparent", color: ACCENT, border: "1px solid transparent", boxShadow: "none" }
           : { backgroundColor: "transparent", color: FG, border: "1px solid transparent", boxShadow: "none" };
@@ -202,10 +203,10 @@ export function Checkbox({
 
 /* ── Inline alert ── */
 const ALERT = {
-  info: { bg: "#eef3ff", border: "#c7d6fb", fg: "#1e3a8a", icon: <Info size={14} color="#2c5ad8" /> },
-  warning: { bg: "#fff8e6", border: "#f5d48a", fg: "#6b4a00", icon: <TriangleAlert size={14} color="#b7791f" /> },
-  danger: { bg: "#fdecef", border: "#f4b8c4", fg: "#7f1d2d", icon: <TriangleAlert size={14} color="#be123c" /> },
-  success: { bg: "#eaf7f0", border: "#b5e3c9", fg: "#0f5132", icon: <CircleCheck size={14} color="#12a05c" /> },
+  info: { bg: "var(--primary-50)", border: "var(--primary-300)", fg: "var(--primary-900)", icon: <Info size={14} color="var(--primary-600)" /> },
+  warning: { bg: "var(--yellow-100)", border: "#fce9ba", fg: "var(--yellow-900)", icon: <TriangleAlert size={14} color="#be8f17" /> },
+  danger: { bg: "var(--pink-100)", border: "#fcbadd", fg: "var(--pink-800)", icon: <TriangleAlert size={14} color="#be1770" /> },
+  success: { bg: "#e8fef5", border: "#a0f8d5", fg: "var(--green-900)", icon: <CircleCheck size={14} color="var(--green-600)" /> },
 };
 export function Alert({ tone, children, role = "note" }: { tone: keyof typeof ALERT; children: ReactNode; role?: string }) {
   const a = ALERT[tone];
@@ -246,9 +247,9 @@ export function Card({
         gap: 6,
         padding,
         borderRadius: 12,
-        border: `1px solid ${selected ? "rgba(44,36,195,0.45)" : highlighted ? "rgba(44,36,195,0.3)" : BORDER}`,
-        backgroundColor: selected ? TINT : disabled ? "rgba(19,18,33,0.02)" : "#fff",
-        boxShadow: highlighted ? "0 0 0 3px rgba(44,36,195,0.12)" : "none",
+        border: `1px solid ${selected ? "var(--primary-600)" : highlighted ? "var(--primary-300)" : BORDER}`,
+        backgroundColor: selected ? TINT : disabled ? "var(--neutral-100)" : "#fff",
+        boxShadow: highlighted ? "0 0 0 3px rgba(44,36,195,0.12)" : "var(--elevation-sm)",
         cursor: onClick && !disabled ? "pointer" : "default",
       }}
     >
@@ -272,9 +273,9 @@ export function SearchField({
   return (
     <div
       className="flex items-center focus-within:ring-2 focus-within:ring-[var(--ring)]"
-      style={{ gap: 8, height: 36, padding: "0 10px", borderRadius: "var(--radius)", border: `1px solid ${BORDER}`, backgroundColor: "#fff", boxShadow: "var(--elevation-sm)" }}
+      style={{ gap: 8, height: 34, padding: "0 12px", borderRadius: "var(--radius)", border: `1px solid ${BORDER}`, backgroundColor: "#fff", boxShadow: "var(--elevation-sm)" }}
     >
-      <Search size={14} color="#7c7b87" aria-hidden="true" />
+      <Search size={14} color="var(--essential-tertiary)" aria-hidden="true" />
       <input
         ref={inputRef}
         value={value}
@@ -284,7 +285,7 @@ export function SearchField({
         onKeyDown={onKeyDown}
         placeholder={placeholder}
         aria-label={placeholder}
-        className="flex-1 min-w-0 border-none outline-none bg-transparent placeholder:text-[#9e9daa]"
+        className="flex-1 min-w-0 border-none outline-none bg-transparent placeholder:text-[#7c7b87]"
         style={{ fontSize: "var(--text-sm)", lineHeight: "20px", color: FG }}
       />
       {value && (
@@ -347,17 +348,17 @@ export function Stepper({ step, locked }: { step: number; locked: boolean }) {
                   height: 20,
                   borderRadius: "50%",
                   fontSize: 10,
-                  fontWeight: 600,
+                  fontWeight: "var(--font-weight-medium)",
                   fontFamily: MONO,
-                  backgroundColor: done ? "#2c24c3" : current ? "var(--primary)" : isLocked ? "#f0f0f2" : "#fff",
-                  color: done || current ? "#fff" : "#9e9daa",
-                  border: done || current || isLocked ? "none" : "1px solid rgba(19,18,33,0.2)",
+                  backgroundColor: done ? "var(--primary-600)" : current ? "var(--primary-900)" : isLocked ? "var(--neutral-200)" : "#fff",
+                  color: done || current ? "#fff" : "var(--neutral-500)",
+                  border: done || current || isLocked ? "none" : "1px solid var(--neutral-400)",
                   boxShadow: current ? "0 0 0 4px rgba(44,36,195,0.12)" : "none",
                 }}
               >
                 {done ? <Check size={11} strokeWidth={3} /> : isLocked ? <Lock size={10} /> : n}
               </span>
-              <span style={{ fontSize: 11, lineHeight: "14px", whiteSpace: "nowrap", fontWeight: current ? 600 : 400, color: current ? FG : done ? FG2 : "#9e9daa" }}>
+              <span style={{ fontSize: 11, lineHeight: "14px", whiteSpace: "nowrap", fontWeight: current ? "var(--font-weight-medium)" : "var(--font-weight-normal)", color: current ? FG : done ? FG2 : "var(--neutral-500)" }}>
                 {label}
               </span>
             </li>

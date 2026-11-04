@@ -1,4 +1,4 @@
-import { Download } from "lucide-react";
+import { ArrowLeftRight, Download, Shuffle } from "lucide-react";
 import { CampaignStatusCard } from "./CampaignStatusCard";
 import { Metrics, TARGETS } from "./swap/swapData";
 
@@ -45,11 +45,10 @@ export function AvailabilityPanel({ visible, metrics, state, top = 76, onSwapFra
       {/* ── Availability card ── */}
       <div
         style={{
-          backgroundColor: "#ebeefe",
+          backgroundColor: "var(--primary-200)",
           borderRadius: 12,
-          padding: 8,
-          boxShadow:
-            "0px 4px 12px rgba(16,16,52,0.08), 0px 1px 3px rgba(16,16,52,0.06)",
+          padding: 4,
+          boxShadow: "var(--elevation-sm)",
         }}
       >
         <div className="flex items-center justify-between" style={{ padding: "2px 6px 8px 6px" }}>
@@ -86,14 +85,14 @@ export function AvailabilityPanel({ visible, metrics, state, top = 76, onSwapFra
           {rows.map((r) => (
             <div key={r.label} className="flex flex-col" style={{ gap: 6 }}>
               <div className="flex items-baseline justify-between" style={{ gap: 12 }}>
-                <span style={{ fontSize: "var(--text-sm)", color: "var(--foreground)", lineHeight: "20px" }}>
+                <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-medium)", color: "var(--essential-primary)", lineHeight: "20px" }}>
                   {r.label}
                 </span>
-                <span style={{ fontSize: 18, fontWeight: 700, color: "var(--foreground)", lineHeight: "24px", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
+                <span style={{ fontSize: 20, fontWeight: "var(--font-weight-semibold)", color: "var(--essential-primary)", lineHeight: "28px", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
                   {r.value}
                 </span>
               </div>
-              <span style={{ alignSelf: "flex-end", fontSize: "var(--text-sm)", color: "#7c7b87", lineHeight: "20px", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
+              <span style={{ alignSelf: "flex-end", fontSize: "var(--text-sm)", color: "var(--essential-tertiary)", lineHeight: "20px", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
                 {r.target}
               </span>
             </div>
@@ -104,67 +103,43 @@ export function AvailabilityPanel({ visible, metrics, state, top = 76, onSwapFra
       {/* ── Campaign Status card (12px gap comes from parent flex gap) ── */}
       <CampaignStatusCard />
 
-      {/* ── Optimise card — only while targets are missed ── */}
+      {/* ── Campaign optimisation card — only while targets are missed ── */}
       {state === "missed" && (
         <div
           style={{
-            backgroundColor: "#ffffff",
+            backgroundColor: "var(--neutral-100)",
             borderRadius: 12,
-            padding: 12,
-            boxShadow: "0px 3px 4px 0px rgba(16,16,52,0.06), 0px 1px 2px 0px rgba(16,16,52,0.04)",
-            border: "1px solid rgba(19,18,33,0.1)",
-            display: "flex",
-            flexDirection: "column",
-            gap: 8,
+            border: "1px solid var(--neutral-300)",
+            boxShadow: "var(--elevation-sm)",
           }}
         >
-          <div className="flex flex-col" style={{ gap: 2, paddingLeft: 4 }}>
-            <span style={{ fontSize: "var(--text-xs)", fontWeight: "var(--font-weight-medium)", lineHeight: "16px", color: "var(--foreground)" }}>
-              Optimise campaign
-            </span>
-            <span style={{ fontSize: "var(--text-xs)", lineHeight: "16px", color: "var(--muted-foreground)" }}>
-              Targets are not met. Choose how to close the gap.
-            </span>
+          <div style={{ padding: "4px 8px", fontSize: "var(--text-xs)", lineHeight: "20px", color: "var(--essential-tertiary)" }}>
+            Campaign optimisation
           </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <div className="flex" style={{ gap: 8, padding: 12, paddingTop: 0 }}>
             {[
-              { label: "Reshuffle campaign", sub: "Rebalance frames within this deal line", action: undefined },
-              { label: "Swap frames", sub: "Take specific frames from other campaigns for a set period", action: onSwapFrame },
-            ].map(({ label, sub, action }, i, arr) => (
+              { label: "Reshuffle", icon: <Shuffle size={14} aria-hidden="true" />, action: undefined, primary: false },
+              { label: "Swap frames", icon: <ArrowLeftRight size={14} aria-hidden="true" />, action: onSwapFrame, primary: true },
+            ].map(({ label, icon, action, primary }) => (
               <button
                 key={label}
+                type="button"
                 onClick={action}
                 disabled={!action}
+                className="flex flex-1 items-center justify-center cursor-pointer outline-none transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  padding: "8px 10px",
-                  backgroundColor: "transparent",
-                  border: "none",
-                  borderRadius: 8,
-                  outline: "none",
-                  cursor: action ? "pointer" : "default",
-                  textAlign: "left",
-                  transition: "background-color 0.12s ease",
-                  borderBottom: i < arr.length - 1 ? "1px solid rgba(19,18,33,0.07)" : "none",
+                  gap: 6,
+                  height: 32,
+                  borderRadius: 6,
+                  fontSize: "var(--text-sm)",
+                  boxShadow: "var(--elevation-sm)",
+                  backgroundColor: primary ? "var(--primary-900)" : "#fff",
+                  color: primary ? "var(--primary-50)" : "var(--primary-600)",
+                  border: primary ? "1px solid transparent" : "1px solid var(--neutral-300)",
                 }}
-                onMouseEnter={(e) => action && (e.currentTarget.style.backgroundColor = "rgba(19,18,33,0.03)")}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
               >
-                <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                  <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-medium)", lineHeight: "20px", color: "var(--accent)" }}>
-                    {label}
-                  </span>
-                  <span style={{ fontSize: "var(--text-xs)", lineHeight: "16px", color: "var(--muted-foreground)" }}>
-                    {sub}
-                  </span>
-                </div>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, marginLeft: 8 }} aria-hidden="true">
-                  <path d="M6 3L11 8L6 13" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                {icon}
+                {label}
               </button>
             ))}
           </div>
