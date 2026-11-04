@@ -249,3 +249,11 @@ input {
 html {
   font-size: var(--font-size);
 }
+
+/* Light scrollbars everywhere: white track, grey thumb */
+:root {
+  color-scheme: light;
+}
+* {
+  scrollbar-color: var(--neutral-400) #ffffff;
+}

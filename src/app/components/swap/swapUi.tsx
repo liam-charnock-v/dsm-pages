@@ -57,11 +57,11 @@ export const Caption = ({ children, color = FG3, style }: { children: ReactNode;
 );
 
 /* ── Tooltip: shown on hover or keyboard focus ── */
-export function Tooltip({ content, children }: { content: ReactNode; children: ReactNode }) {
+export function Tooltip({ content, children, width, inline, below }: { content: ReactNode; children: ReactNode; width?: number; inline?: boolean; below?: boolean }) {
   const [open, setOpen] = useState(false);
   return (
     <span
-      className="relative block"
+      className={inline ? "relative inline-flex" : "relative block"}
       tabIndex={0}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
@@ -74,7 +74,7 @@ export function Tooltip({ content, children }: { content: ReactNode; children: R
         <span
           role="tooltip"
           className="absolute"
-          style={{ left: 0, right: 0, bottom: "calc(100% + 6px)", zIndex: 30, padding: "8px 10px", borderRadius: 6, backgroundColor: "#131221", color: "#fff", fontSize: "var(--text-xs)", lineHeight: "16px", boxShadow: "0px 4px 12px rgba(16,16,52,0.2)", pointerEvents: "none" }}
+          style={{ ...(width ? { right: 0, width } : { left: 0, right: 0 }), ...(below ? { top: "calc(100% + 6px)" } : { bottom: "calc(100% + 6px)" }), zIndex: 30, padding: "8px 10px", borderRadius: 6, backgroundColor: "#131221", color: "#fff", fontSize: "var(--text-xs)", lineHeight: "16px", boxShadow: "0px 4px 12px rgba(16,16,52,0.2)", pointerEvents: "none" }}
         >
           {content}
         </span>

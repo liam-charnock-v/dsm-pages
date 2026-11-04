@@ -3,13 +3,14 @@ import { ArrowRight, Calendar } from "lucide-react";
 import type { SwappedInFrame } from "../DealLinePanel";
 import { ScheduleStep } from "./ScheduleStep";
 import { DiscoverFind, searchFrames } from "./DiscoverFind";
+import { DiscoverSuggested, suggestedFrames } from "./DiscoverSuggested";
 import type { Filters } from "./SwapFilters";
 import { DiscoverUpload, EMPTY_UPLOAD, UploadState } from "./DiscoverUpload";
 import { SelectedFrames } from "./SelectedFrames";
 import { ReplaceStep } from "./ReplaceStep";
 import { ReviewStep, reviewCounts } from "./ReviewStep";
 import {
-  Candidate, DEAL_LINE, FrameChoice, Metrics, Period, SwapFrame, activeOccupants, daysIn, defaultChoice, fmtLong, fmtShort,
+  Candidate, DEAL_LINE, SWAP_VERSION, FrameChoice, Metrics, Period, SwapFrame, activeOccupants, daysIn, defaultChoice, fmtLong, fmtShort,
   frameById, frameImpressions, framePrice, isReady, replacementSlots,
 } from "./swapData";
 import { Btn, Caption, DIVIDER, FG, PanelFooter, SKELETON_KEYFRAMES, Skeleton, Stepper, TextLink, Title } from "./swapUi";
@@ -23,6 +24,8 @@ export interface SwapResult {
 }
 
 const NARROW = 372;
+const TABS_V1 = [["find", "Find a frame"], ["upload", "Upload list"]] as const;
+const TABS_V2 = [["suggested", "Suggested"], ["find", "Find a frame"], ["upload", "Bulk upload"]] as const;
 const WIDE = 780;
 
 export function SwapPanel({
@@ -42,7 +45,8 @@ export function SwapPanel({
   const [schedule, setSchedule] = useState<Period | null>(DEAL_LINE.period);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [view, setView] = useState<"search" | "selected">("search");
-  const [tab, setTab] = useState<"find" | "upload">("find");
+  // V2 opens on smart suggestions; V1 on search
+  const [tab, setTab] = useState<"suggested" | "find" | "upload">(SWAP_VERSION === 2 ? "suggested" : "find");
   const [query, setQuery] = useState("");
   // Pre-selected from the deal line's filters
   const [filters, setFilters] = useState<Filters>(() => ({
@@ -81,7 +85,8 @@ export function SwapPanel({
   // Map is context only: pins follow what the panel is showing
   useEffect(() => {
     let frames: SwapFrame[] = [];
-    if (step === 2 && view === "search" && tab === "find" && period) frames = searchFrames(query, period, filters);
+    if (step === 2 && view === "search" && tab === "suggested") frames = suggestedFrames().map((s) => s.frame);
+    else if (step === 2 && view === "search" && tab === "find" && period) frames = searchFrames(query, period, filters);
     else if (step === 2 && view === "search" && tab === "upload") frames = (upload.result?.matched ?? []).map((id) => frameById(id)!);
     else if (step >= 2) frames = selected.map((id) => frameById(id)!);
     onMapPins(frames.filter((f) => !f.notMatching).map((f) => ({ id: f.id, lat: f.lat, lng: f.lng })));
@@ -133,11 +138,8 @@ export function SwapPanel({
   if (step === 1) {
     back = () => { setPickerOpen(false); setStep(2); };
     primary = <Btn variant="primary" disabled={!schedule} onClick={() => setStep(2)} iconEnd={arrow}>Continue</Btn>;
-  } else if (step === 2 && view === "search" && tab === "find") {
+  } else if (step === 2 && view === "search" && tab !== "upload") {
     back = () => setStep(1);
-    if (selected.length) {
-      middle = <span className="flex items-center" style={{ gap: 8 }}><Title size="sm">{plural(selected.length)} selected</Title><TextLink onClick={() => setSelected([])}>Clear</TextLink></span>;
-    }
     primary = <Btn variant="primary" disabled={!selected.length} onClick={() => openSelected(selected)} iconEnd={arrow}>Continue</Btn>;
   } else if (step === 2 && view === "search") {
     const n = upload.status === "parsed" ? upload.selected.length : 0;
@@ -228,7 +230,7 @@ export function SwapPanel({
                     <TextLink onClick={() => { setStep(1); setPickerOpen(true); }}>Edit</TextLink>
                   </div>
                   <div role="tablist" aria-label="Discover method" className="flex" style={{ backgroundColor: "var(--neutral-200)", borderRadius: 6, padding: 2, gap: 2 }}>
-                    {([["find", "Find a frame"], ["upload", "Upload list"]] as const).map(([id, label]) => (
+                    {(SWAP_VERSION === 2 ? TABS_V2 : TABS_V1).map(([id, label]) => (
                       <button
                         key={id}
                         role="tab"
@@ -241,7 +243,9 @@ export function SwapPanel({
                       </button>
                     ))}
                   </div>
-                  {tab === "find" ? (
+                  {tab === "suggested" ? (
+                    <DiscoverSuggested period={period} selected={selected} onToggle={toggle} hoveredId={hoveredId} onHover={onHover} />
+                  ) : tab === "find" ? (
                     <DiscoverFind
                       period={period}
                       query={query}

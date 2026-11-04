@@ -64,6 +64,10 @@ export const fmtEur = (n: number) => `€${Math.round(n).toLocaleString("en-US")
 export const fmtMillions = (n: number) => `${parseFloat((n / 1_000_000).toFixed(2))}M`;
 export const fmtDistance = (m: number) => (m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${m} m`);
 
+/* ── Prototype version: ?v=2 shows the next phase (suggested frames) ── */
+export const SWAP_VERSION: 1 | 2 =
+  typeof window !== "undefined" && new URLSearchParams(window.location.search).get("v") === "2" ? 2 : 1;
+
 /* ── Campaign + deal line ──────────────────── */
 export const CAMPAIGN = {
   name: "Campaña Verano Refrescos 2026",
@@ -84,12 +88,12 @@ export const TARGETS: Metrics = { frames: 120, impressions: 2_400_000, budget: 8
 export const INITIAL_METRICS: Metrics = { frames: 117, impressions: 2_210_000, budget: 81_280 };
 
 /* ── Donor campaigns ───────────────────────── */
-export interface Donor { id: string; name: string; advertiser: string; run: Period; live?: boolean }
+export interface Donor { id: string; name: string; advertiser: string; code: string; run: Period; live?: boolean }
 export const DONORS: Record<string, Donor> = {
-  galaxy: { id: "galaxy", name: "Lanzamiento Galaxy S26", advertiser: "Samsung", run: { start: day(2026, 6, 15), end: day(2026, 9, 15) }, live: true },
-  rebajas: { id: "rebajas", name: "Rebajas Verano", advertiser: "El Corte Inglés", run: { start: day(2026, 7, 1), end: day(2026, 7, 15) } },
-  movistar: { id: "movistar", name: "Campaña Movistar+", advertiser: "Telefónica", run: { start: day(2026, 7, 16), end: day(2026, 8, 31) } },
-  madcool: { id: "madcool", name: "Mad Cool Festival", advertiser: "Live Nation", run: { start: day(2026, 6, 20), end: day(2026, 8, 10) } },
+  galaxy: { id: "galaxy", name: "Lanzamiento Galaxy S26", advertiser: "Samsung", code: "SA1G150626", run: { start: day(2026, 6, 15), end: day(2026, 9, 15) }, live: true },
+  rebajas: { id: "rebajas", name: "Rebajas Verano", advertiser: "El Corte Inglés", code: "EC1R010726", run: { start: day(2026, 7, 1), end: day(2026, 7, 15) } },
+  movistar: { id: "movistar", name: "Campaña Movistar+", advertiser: "Telefónica", code: "TE1M160726", run: { start: day(2026, 7, 16), end: day(2026, 8, 31) } },
+  madcool: { id: "madcool", name: "Mad Cool Festival", advertiser: "Live Nation", code: "LN1F200626", run: { start: day(2026, 6, 20), end: day(2026, 8, 10) } },
 };
 
 /* ── Frames ────────────────────────────────── */
@@ -145,6 +149,17 @@ export const FRAMES: SwapFrame[] = [
   { id: "ES-MAD-SA-00520.D1.01", address: "Calle de Goya 14, Madrid", area: "sal", lat: 40.4245, lng: -3.6845, format: "Mupi", media: "Paper", size: "1.2 × 1.75 m", impressions: 55_400, price: 1_060, tags: ["Local", "Premium"], occupants: [] },
 ];
 export const frameById = (id: string) => FRAMES.find((f) => f.id === id);
+
+/* ── V2: smart suggestions ranked against the deal line criteria ──
+   Scores and reasons are mocked; in product they come from the matching service. */
+export interface Suggestion { frameId: string; score: number; postcode: string; reasons: string[] }
+export const SUGGESTIONS: Suggestion[] = [
+  { frameId: "ES-MAD-GV-00123.D1.01", score: 98, postcode: "28013", reasons: ["Format and media type match the deal line", "Audience fit: 18–34, high footfall", "Free from Galaxy S26 for all of 1–31 Jul"] },
+  { frameId: "ES-MAD-GV-00131.D1.01", score: 94, postcode: "28013", reasons: ["Format and media type match the deal line", "Audience fit: 18–34", "Available for all of 1–31 Jul"] },
+  { frameId: "ES-MAD-PC-00321.D1.01", score: 89, postcode: "28046", reasons: ["Media type matches the deal line", "Premium business district", "Partly free; the rest comes from Rebajas Verano"] },
+  { frameId: "ES-MAD-SA-00520.D1.01", score: 85, postcode: "28001", reasons: ["Format and media type match the deal line", "Audience fit: 25–44, high income", "Available for all of 1–31 Jul"] },
+  { frameId: "ES-MAD-PS-00456.D2.02", score: 82, postcode: "28013", reasons: ["Digital share of time adds impressions", "Transport hub, very high footfall", "Slots come from three campaigns"] },
+];
 
 /* Typeahead locations — counts are inventory totals for the market */
 export const LOCATIONS = [

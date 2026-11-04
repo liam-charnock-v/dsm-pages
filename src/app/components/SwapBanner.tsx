@@ -40,7 +40,7 @@ export function SwapBanner({ onCancel }: { onCancel: () => void }) {
         <div style={{ width: 1, height: 14, backgroundColor: "rgba(248,248,249,0.3)", flexShrink: 0 }} />
 
         <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 400, color: "rgba(248,248,249,0.9)", lineHeight: "20px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          Take specific frames from other campaigns for a set period. Only the frames and dates you choose move.
+          Take specific frames from other campaigns for a set period.
         </span>
       </div>
 

@@ -126,7 +126,7 @@ const SECTIONS: Section[] = [
         iconPath: svgPaths.p24abf100,
         iconViewBox: "0 0 15 10",
         iconInset: "18.75% 3.13%",
-        values: { amount: "100,000", qty: "1" },
+        values: { amount: "2,400,000", qty: "1" },
       },
       {
         id: "frame",
@@ -134,7 +134,7 @@ const SECTIONS: Section[] = [
         iconPath: svgPaths.p789d080,
         iconViewBox: "0 0 9 14",
         iconInset: "6.25% 21.88%",
-        values: { amount: "50", qty: "1" },
+        values: { amount: "120", qty: "1" },
         unmet: true,
       },
       {
@@ -143,7 +143,7 @@ const SECTIONS: Section[] = [
         iconPath: svgPaths.p3858d00,
         iconViewBox: "0 0 9 11.4999",
         iconInset: "12.5% 25% 15.62% 18.75%",
-        values: { amount: "100,000", qty: "1" },
+        values: { amount: "85,000", qty: "1" },
       },
     ],
     addItems: [
@@ -323,9 +323,12 @@ function TargetTile({
   selected,
   onSelect,
   position = "single",
+  met = false,
 }: {
   target: TargetRow;
   selected: boolean;
+  /** All deal line targets met: chips turn green */
+  met?: boolean;
   onSelect: () => void;
   position?: "first" | "middle" | "last" | "single";
 }) {
@@ -378,7 +381,7 @@ function TargetTile({
           <div
             className="flex h-6 items-center justify-center overflow-clip px-2"
             style={{
-              backgroundColor: target.unmet ? "var(--pink-100)" : "var(--primary-100)",
+              backgroundColor: met ? "var(--green-100)" : target.unmet ? "var(--pink-100)" : "var(--primary-100)",
               borderRadius: "var(--radius-full)",
               minWidth: 24,
             }}
@@ -388,7 +391,7 @@ function TargetTile({
                 fontSize: "var(--text-sm)",
                 fontWeight: "var(--font-weight-normal)",
                 lineHeight: "20px",
-                color: target.unmet ? "var(--pink-800)" : "var(--secondary-foreground)",
+                color: met ? "var(--green-900)" : target.unmet ? "var(--pink-800)" : "var(--secondary-foreground)",
               }}
             >
               {target.values.amount}
@@ -398,7 +401,7 @@ function TargetTile({
           <div
             className="flex h-6 items-center justify-center overflow-clip px-2"
             style={{
-              backgroundColor: "var(--primary-100)",
+              backgroundColor: met ? "var(--green-100)" : "var(--primary-100)",
               borderRadius: "var(--radius-full)",
               minWidth: 24,
             }}
@@ -408,7 +411,7 @@ function TargetTile({
                 fontSize: "var(--text-sm)",
                 fontWeight: "var(--font-weight-normal)",
                 lineHeight: "20px",
-                color: "var(--secondary-foreground)",
+                color: met ? "var(--green-900)" : "var(--secondary-foreground)",
               }}
             >
               {target.values.qty}
@@ -738,6 +741,7 @@ export function DealLinePanel({
   onAvailabilityReady,
   initialDateRange,
   initialSelections,
+  targetsMet = false,
   swappedIn = [],
 }: {
   dealLineName?: string;
@@ -746,6 +750,8 @@ export function DealLinePanel({
   initialDateRange?: DateRange;
   /** Pre-filled field values, keyed by card id */
   initialSelections?: Record<string, string[]>;
+  /** Every target (frames, impressions, budget) is met */
+  targetsMet?: boolean;
   /** Frames moved in by a confirmed swap */
   swappedIn?: SwappedInFrame[];
 }) {
@@ -961,6 +967,7 @@ export function DealLinePanel({
                           selected={selectedItems.has(target.id)}
                           onSelect={() => toggleSelect(target.id)}
                           position={getPosition(i, section.targets!.length)}
+                          met={targetsMet}
                         />
                       ))}
                     </div>

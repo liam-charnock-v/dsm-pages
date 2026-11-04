@@ -14,7 +14,7 @@ import { SwapPanel, SwapResult, MapPin } from "./components/swap/SwapPanel";
 import { CancelSwapDialog, ConfirmingSwapOverlay, OpeningSwapOverlay } from "./components/swap/SwapOverlays";
 import { DEAL_LINE, INITIAL_METRICS, Metrics, SwapFrame, TARGETS } from "./components/swap/swapData";
 import { Toaster } from "./components/ui/sonner";
-import { CircleCheck, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 
 interface DealLineTab {
   id: string;
@@ -124,23 +124,20 @@ export default function App() {
       (id) => (
         <div
           role="status"
-          className="flex items-center"
-          style={{ gap: 12, width: "100%", padding: "10px 12px 10px 16px", borderRadius: 8, backgroundColor: "var(--sidebar)", color: "#fff", boxShadow: "0px 16px 48px rgba(16,16,52,0.3)", fontSize: 13, lineHeight: "20px" }}
+          className="flex items-start"
+          style={{ gap: 12, width: "100%", padding: "12px 12px 12px 16px", borderRadius: 8, backgroundColor: "#fff", border: "1px solid var(--neutral-300)", boxShadow: "0px 4px 12px rgba(16,16,52,0.08), 0px 1px 2px rgba(0,0,0,0.05)" }}
         >
-          <CircleCheck size={16} color="#4ade80" aria-hidden="true" />
-          <span className="flex-1">
-            {n} {n === 1 ? "frame" : "frames"} swapped.{r.replacements ? " Donor campaigns updated." : ""}
+          <Check size={16} color="var(--essential-secondary)" aria-hidden="true" style={{ flexShrink: 0, marginTop: 2 }} />
+          <span className="flex flex-col flex-1 min-w-0" style={{ gap: 2 }}>
+            <span style={{ fontSize: "var(--text-sm)", lineHeight: "20px", fontWeight: "var(--font-weight-medium)", color: "var(--essential-primary)" }}>
+              {n} {n === 1 ? "frame" : "frames"} swapped
+            </span>
+            <span style={{ fontSize: "var(--text-sm)", lineHeight: "20px", color: "var(--essential-secondary)" }}>
+              {r.replacements ? "Donor campaigns have been updated with their replacements." : `Added to ${DEAL_LINE.name}.`}
+            </span>
           </span>
-          <button
-            type="button"
-            onClick={() => { toast.dismiss(id); setSwapResult(null); setMetrics(INITIAL_METRICS); }}
-            className="cursor-pointer border-none bg-transparent p-0 hover:underline"
-            style={{ color: "#c7c4ff", fontSize: 13, fontWeight: 600 }}
-          >
-            Restart prototype
-          </button>
-          <button type="button" aria-label="Dismiss" onClick={() => toast.dismiss(id)} className="flex items-center justify-center cursor-pointer border-none bg-transparent p-0" style={{ width: 24, height: 24 }}>
-            <X size={14} color="#fff" />
+          <button type="button" aria-label="Dismiss" onClick={() => toast.dismiss(id)} className="flex items-center justify-center cursor-pointer border-none bg-transparent p-0 shrink-0" style={{ width: 20, height: 20 }}>
+            <X size={16} color="var(--essential-secondary)" />
           </button>
         </div>
       ),
@@ -275,6 +272,7 @@ export default function App() {
                                   hideCheckAllocate
                                   initialDateRange={dl.id === "dl1" ? DEAL_LINE_RANGE : undefined}
                                   initialSelections={dl.id === "dl1" ? DEAL_LINE_SELECTIONS : undefined}
+                                  targetsMet={dl.id === "dl1" && targetsMet}
                                 />
                                 {/* Selection ring */}
                                 {isSelected && (
@@ -322,6 +320,7 @@ export default function App() {
                             onAvailabilityReady={() => setShowAvailability(true)}
                             initialDateRange={activeDealLine === "dl1" ? DEAL_LINE_RANGE : undefined}
                             initialSelections={activeDealLine === "dl1" ? DEAL_LINE_SELECTIONS : undefined}
+                            targetsMet={activeDealLine === "dl1" && targetsMet}
                           />
                         </div>
                       )}
@@ -429,7 +428,7 @@ export default function App() {
         top={swapMode ? 76 + BANNER_H : 76}
         onSwapFrame={enterSwap}
       />
-      <Toaster position="bottom-center" style={{ "--width": "440px" } as React.CSSProperties} />
+      <Toaster position="bottom-right" style={{ "--width": "440px" } as React.CSSProperties} />
       <style>{`@keyframes swapSpin { to { transform: rotate(360deg); } }`}</style>
 
       {/* Paste loading overlay */}
