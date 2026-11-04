@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dsm-swap",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "--config", "vite.figma.config.ts"],
+      "port": 8443
+    }
+  ]
+}

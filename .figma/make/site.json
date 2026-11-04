@@ -1,0 +1,10 @@
+{
+  "description": "Streamline your out-of-home advertising campaigns with an intuitive planning tool that offers interactive features for efficient media selection.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
