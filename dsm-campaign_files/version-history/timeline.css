@@ -1,0 +1,123 @@
+/* Branch: Timeline panel — version history panel over the map. */
+
+.vt-panel {
+  position: fixed;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--neutral-300);
+  border-radius: 12px;
+  background: var(--neutral-50);
+  box-shadow: 0 8px 24px rgba(19, 18, 33, 0.14);
+  color: var(--essential-primary);
+  font-size: 13px;
+  overflow: hidden;
+  animation: vt-in 160ms ease-out;
+}
+.vt-panel[hidden] { display: none; }
+@keyframes vt-in { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: none; } }
+
+.vt-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 10px 10px 14px;
+  border-bottom: 1px solid var(--neutral-300);
+}
+.vt-title { font-size: 15px; font-weight: 600; line-height: 1.3; }
+.vt-sub { margin-top: 2px; font-size: 12px; color: var(--essential-tertiary); }
+.vt-close {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; padding: 0;
+  border: 0; border-radius: 6px;
+  background: transparent; color: var(--essential-secondary); cursor: pointer;
+}
+.vt-close:hover { background: var(--neutral-200); }
+.vt-close svg { width: 16px; height: 16px; }
+
+.vt-list { flex: 1; overflow-y: auto; padding: 6px 0; }
+
+/* Each version: a rail with a dot on the left, details on the right */
+.vt-item, .vt-pending {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  margin: 0 6px;
+  padding: 10px 8px 10px 4px;
+  border-radius: 8px;
+}
+.vt-item { cursor: pointer; transition: background-color 120ms ease; }
+.vt-item:hover { background: var(--neutral-100); }
+.vt-item:focus-visible { outline: 2px solid var(--primary-600); outline-offset: -2px; }
+.vt-item.is-viewing { background: var(--primary-50); }
+.vt-item.is-new { animation: vt-new 1.6s ease-out; }
+@keyframes vt-new { 0% { background: var(--primary-200); } 100% { background: var(--primary-50); } }
+
+/* The rail line spans each entry's full height (padding included) so the segments
+   join edge to edge; it starts and ends at the centre of the first and last dots. */
+.vt-rail { position: relative; flex: 0 0 17px; display: flex; justify-content: center; }
+.vt-rail::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: -10px; bottom: -10px;   /* the entry's top and bottom padding */
+  width: 1px;
+  background: var(--neutral-400);
+}
+.vt-list > :first-child .vt-rail::before { top: 9px; }                 /* from the first dot's centre */
+.vt-item:last-child .vt-rail::before { bottom: auto; height: 20px; }   /* down to the last dot's centre */
+.vt-item:only-child .vt-rail::before { display: none; }
+.vt-dot {
+  position: relative;
+  z-index: 1;
+  width: 11px; height: 11px;
+  margin-top: 4px;
+  border-radius: 50%;
+  border: 2px solid var(--neutral-500);
+  background: var(--neutral-50);
+}
+.vt-item:first-child .vt-dot, .vt-pending + .vt-item .vt-dot { border-color: var(--primary-900); background: var(--primary-900); }
+.vt-item.is-viewing .vt-dot { border-color: var(--primary-900); box-shadow: 0 0 0 3px var(--primary-200); }
+.vt-dot--pending { border-style: dashed; border-color: var(--yellow-700); background: var(--yellow-50); }
+
+.vt-main { flex: 1; min-width: 0; }
+.vt-row1 { display: flex; align-items: center; gap: 6px; min-height: 20px; }
+.vt-name { font-weight: 600; }
+.vt-chip {
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--neutral-200);
+  color: var(--neutral-800);
+  font-size: 11px;
+  line-height: 20px;
+}
+.vt-chip--current { background: var(--green-100); color: var(--green-900); }
+.vt-meta { margin-top: 2px; font-size: 12px; color: var(--essential-tertiary); }
+
+.vt-stats {
+  display: grid;
+  grid-template-columns: 0.7fr 1.2fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--neutral-300);
+}
+.vt-stat { display: flex; flex-direction: column; min-width: 0; }
+.vt-stat__label { font-size: 11px; color: var(--essential-tertiary); }
+.vt-stat__value { font-size: 13px; font-weight: 600; white-space: nowrap; }
+
+.vt-pending {
+  margin-bottom: 4px;
+  border: 1px dashed var(--yellow-300);
+  background: var(--yellow-50);
+  color: var(--yellow-950);
+}
+.vt-pending .vt-meta { color: var(--yellow-900); }
+.vt-pending .vt-rail::before { bottom: -15px; } /* padding + dashed border + gap to the next entry */
+.vt-pending { padding-left: 3px; } /* offsets the 1px border so the rail lines up with the entries below */
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-panel, .vt-item.is-new { animation: none; }
+}

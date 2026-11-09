@@ -1,0 +1,150 @@
+/* Restores styles that the live app injects at runtime (Emotion / CSS-in-JS)
+   and that were lost when the page was saved as a static snapshot. */
+
+/* ---------- react-select base layout (search bar + Available Frames) ---------- */
+.react-select__control {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  height: 34px;
+  cursor: default;
+  outline: 0;
+}
+.react-select__value-container {
+  position: relative;
+  display: grid;
+  flex: 1;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+}
+.react-select__placeholder {
+  grid-area: 1 / 1 / 2 / 3;
+  margin: 0 2px;
+  color: var(--neutral-600);
+}
+.react-select__single-value {
+  grid-area: 1 / 1 / 2 / 3;
+  max-width: 100%;
+  margin: 0 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--essential-primary);
+}
+.react-select__single-value--is-disabled { color: var(--essential-secondary); }
+.react-select__input-container {
+  display: inline-grid;
+  grid-area: 1 / 1 / 2 / 3;
+  grid-template-columns: 0 min-content;
+  margin: 0 2px;
+  padding: 0;
+  color: var(--essential-primary);
+}
+.react-select__input-container::after {
+  content: attr(data-value) " ";
+  visibility: hidden;
+  white-space: pre;
+  grid-area: 1 / 2;
+  font: inherit;
+  min-width: 2px;
+}
+.react-select__indicators {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  align-self: stretch;
+}
+.react-select__indicator-separator { display: none; }
+.react-select__indicator {
+  display: flex;
+  align-items: center;
+  color: var(--neutral-700);
+}
+.react-select__indicator svg { display: block; fill: currentColor; }
+.react-select__control--is-disabled { cursor: not-allowed; }
+
+/* Visually-hidden helpers react-select renders */
+.css-7pg0cj-a11yText {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.css-1hac4vs-dummyInput {
+  grid-area: 1 / 1 / 2 / 3;
+  width: 1px;
+  padding: 0;
+  border: 0;
+  background: 0;
+  color: transparent;
+  caret-color: transparent;
+  opacity: 0;
+  outline: 0;
+  transform: scale(0.01);
+}
+
+/* Fill the 46px white shell, as in the app */
+[data-test-id="frames-locations-search-bar"],
+[data-test-id="asset-view-selector"] { align-items: center; height: 38px; }
+#react-select-assetsView { padding-top: 0; padding-bottom: 0; }
+
+/* ---------- Map toolbar draw buttons (MUI ToggleButton) ---------- */
+[data-test-id^="draw-"][data-test-id$="-button"] {
+  position: static !important;
+  width: 100%;
+  height: 100%;
+}
+[data-test-id^="draw-"] .MuiPaper-root {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  box-shadow: none;
+}
+[data-test-id^="draw-"] .MuiToggleButton-root {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+[data-test-id^="draw-"] .MuiToggleButton-root:hover { background: var(--primary-50); }
+[data-test-id^="draw-"] .MuiToggleButton-root[aria-pressed="true"] { background: var(--primary-200); }
+[data-test-id^="draw-"] .MuiToggleButton-root svg { display: block; }
+[data-test-id^="draw-"] .MuiIconButton-root,
+.MuiTouchRipple-root { display: none; }
+
+/* ---------- Leaflet map (replaces the deck.gl / Mapbox canvas) ---------- */
+#deckgl-wrapper { display: none !important; }
+#ac-map {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--neutral-200);
+  font: inherit;
+}
+#ac-map img { max-width: none !important; max-height: none !important; }
+#ac-map .leaflet-control-attribution { font-size: 10px; background: rgba(255, 255, 255, 0.8); }
+.ac-map-tip {
+  padding: 6px 8px;
+  border: 1px solid var(--neutral-300);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(19, 18, 33, 0.12);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--essential-primary);
+}
+.ac-map-tip b { font-weight: 600; }
+.ac-map-tip span { color: var(--essential-tertiary); }

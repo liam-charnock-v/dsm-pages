@@ -1,0 +1,39 @@
+/* Branch: Step through with arrows — version stepper at the top of the allocation card. */
+
+.vs-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 8px 12px 2px;
+  padding: 4px;
+  border-radius: 8px;
+  background: var(--neutral-950-opacity-5);
+}
+.vs-stepper[hidden] { display: none; }
+
+.vs-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--neutral-300);
+  border-radius: 6px;
+  background: var(--neutral-50);
+  color: var(--primary-900);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+.vs-arrow svg { width: 14px; height: 14px; }
+.vs-arrow:hover:not(:disabled) { background: var(--primary-50); }
+.vs-arrow:disabled { color: var(--neutral-400); background: transparent; border-color: transparent; box-shadow: none; cursor: not-allowed; }
+.vs-arrow:focus-visible { outline: 2px solid var(--primary-600); outline-offset: 1px; }
+
+.vs-label { min-width: 0; text-align: center; line-height: 1.3; }
+.vs-title { font-size: 13px; font-weight: 600; color: var(--primary-900); }
+.vs-sub { font-size: 12px; color: var(--essential-tertiary); white-space: nowrap; }
+.vs-current { color: var(--green-800); font-weight: 600; }

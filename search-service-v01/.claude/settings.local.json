@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"/Users/liamcharnock/Documents/DSM Pages/\")",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 -c \"import bs4; print\\('bs4 ok'\\)\")",
+      "Bash(python3 -c \"import tinycss2; print\\('tinycss2 ok'\\)\")",
+      "Bash(pip3 install *)",
+      "Bash(python3 -c \"import bs4, tinycss2, lxml; print\\('ok'\\)\")",
+      "Bash(python3)",
+      "Bash(mkdir -p /private/tmp/claude-501/-Users-liamcharnock-Documents-DSM-Pages-VIOOH-Trading-Manager-files/abddcf63-9f53-40da-b421-1573a3b0c945/scratchpad)",
+      "Bash(python3 build_site.py)",
+      "Bash(python3 purge_css.py)",
+      "Bash(python3 finalize_css.py)",
+      "Bash(python3 -c \"from datetime import date; print\\(date.today\\(\\)\\)\")"
+    ]
+  }
+}

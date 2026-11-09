@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "static-preview", "runtimeExecutable": "node", "runtimeArgs": [".claude/serve.cjs"], "port": 8899 }
+  ]
+}

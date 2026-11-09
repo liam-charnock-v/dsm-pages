@@ -1,0 +1,5 @@
+# Dependencies (restore with npm/pnpm install)
+node_modules/
+
+# macOS
+.DS_Store
